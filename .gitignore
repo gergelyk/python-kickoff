@@ -1,0 +1,8 @@
+__pycache__/
+dist/
+venv/
+build/
+*.egg-info/
+.envrc
+.python-version
+kickoffcustomize.py
