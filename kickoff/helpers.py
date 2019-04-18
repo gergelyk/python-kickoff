@@ -48,3 +48,10 @@ def parse_args(argv):
 
     return path, name, app_args
 
+
+def doc_to_short_help(doc):
+    if doc:
+        short_help = ''.join(doc.strip().splitlines()[:1])
+    else:
+        short_help = doc
+    return short_help

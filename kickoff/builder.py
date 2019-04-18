@@ -6,6 +6,7 @@ from click_didyoumean import DYMGroup
 from prompt_toolkit.styles import Style
 from .logger import log
 from .exceptions import user_exception_guard
+from .helpers import doc_to_short_help
 from . inspectutils import get_all_defaults, unwrap
 from . import cmdpath
 
@@ -125,7 +126,8 @@ class CmdGroupsManager:
     def _create_group(self, name, doc):
         def target(): pass
         target.__doc__ = doc
-        return click.group(cls=self._get_group_class(), name=name)(target)
+        short_help = doc_to_short_help(doc)
+        return click.group(cls=self._get_group_class(), name=name, short_help=short_help)(target)
 
 
     def _obtain_group(self, path):
@@ -169,7 +171,9 @@ class CmdGroupsManager:
         arg_spec = inspect.getfullargspec(unwrap(func))
         all_defaults = get_all_defaults(arg_spec)
 
-        cmd_opts = arg_spec.annotations.get('return', {})
+        short_help = doc_to_short_help(getattr(func, '__doc__', None))
+        cmd_opts = dict(short_help=short_help)
+        cmd_opts.update(arg_spec.annotations.get('return', {}))
         command_wrapper = self._wrap_command(func, arg_spec)
         cmd = click.command(**cmd_opts)(command_wrapper)
 
