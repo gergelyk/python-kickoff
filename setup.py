@@ -9,7 +9,7 @@ with open(readme_path) as fh:
 
 setup(
     name = 'kickoff',
-    version = '0.3.3',
+    version = '0.3.4',
     description = 'Turns your Python script or module into an application with decent CLI.',
     author = 'Grzegorz Krason',
     author_email = 'grzegorz.krason@gmail.com',
