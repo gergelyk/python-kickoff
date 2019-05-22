@@ -20,22 +20,8 @@ def load_module(name, path=None):
     if path:
         path_abs = str(Path(path).expanduser().absolute())
         sys.path.insert(0, path_abs)
-        path_list = [path]
-    else:
-        path_list = None
 
-    for finder in sys.meta_path:
-        if hasattr(finder, 'find_spec'):
-            spec = finder.find_spec(name, path_list)
-            if spec is not None:
-                break
-    else:
-        msg = f"No module named {name!r}"
-        raise ModuleNotFoundError(msg, name=name)
-    user_module = importlib.util.module_from_spec(spec)
-    with user_exception_guard():
-        spec.loader.exec_module(user_module)
-    sys.modules[name] = user_module
+    user_module = importlib.import_module(name)
     return user_module
 
 
