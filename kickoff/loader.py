@@ -6,7 +6,7 @@ from pathlib import Path
 from .logger import log
 from .shared import get_config
 from . import cmdpath
-from . inspectutils import getfile, isstaticmethod
+from . inspectutils import getfile, isstaticmethod, isclassmethod, extract_func
 from .exceptions import user_exception_guard, KickoffUsageError, user_error_register
 
 RUN_NAME = '__kickoff__'
@@ -98,7 +98,7 @@ class Loader:
 
     def _set_filters(self):
         is_black = lambda c: c[1] in self._config.black_list
-        is_function = lambda c: inspect.isfunction(c[1]) or isstaticmethod(c[1])
+        is_function = lambda c: inspect.isfunction(c[1]) or isstaticmethod(c[1]) or isclassmethod(c[1])
         is_public = lambda c: not c[0].startswith('_')
         is_class = lambda c: inspect.isclass(c[1])
 
@@ -115,7 +115,7 @@ class Loader:
             self.func_filter = lambda c: func_filter(c) and self._is_src_local(c)
 
 
-    def _scan_namespace(self, namespace, recursively=False, path=cmdpath.root):
+    def _scan_namespace(self, namespace, recursively=False, path=cmdpath.root, src_cls=None):
         """ takes:
                 namespace - dictionary of variables to Scanning
                 recursively - whether or not to dig into classes recursively
@@ -125,26 +125,20 @@ class Loader:
                 self._commands - {function_name: function}
         """
         log.debug(f"Scanning namespace {path!r}")
-
-        def extract_func(cmd):
-            if isstaticmethod(cmd):
-                return cmd.__func__
-            else:
-                return cmd
-
         commands_ = dict(filter(self.func_filter, namespace.items()))
-        commands = {path / k: extract_func(v) for k, v in commands_.items() }
+        commands = {path / k: (v, src_cls) for k, v in commands_.items() }
+        qualnames = {path / k: extract_func(v).__qualname__ for k, v in commands_.items() }
         self._galaxy[path] = namespace
         self._commands.update(commands)
 
-        for cmd_name, cmd in commands.items():
-            log.debug(f"Command {cmd.__qualname__!r} discovered under name {cmd_name!r}")
+        for cmd_name, qualname in qualnames.items():
+            log.debug(f"Command {qualname!r} discovered under name {cmd_name!r}")
 
         if recursively:
             cls_dict = dict(filter(self.cls_filter, namespace.items()))
 
             for cls_name, cls in cls_dict.items():
-                self._scan_namespace(vars(cls), recursively, path / cls_name)
+                self._scan_namespace(vars(cls), recursively, path / cls_name, cls)
 
 
     def get_resources(self):

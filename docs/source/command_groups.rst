@@ -12,7 +12,9 @@ Following table explains the details on how `Kickoff` translates elements of Pyt
 ============================================================ ================================
 Python AST                                                   Click
 ============================================================ ================================
-Function or static method                                    Command
+Function                                                     Command
+Static method                                                Command
+Class method                                                 Command
 Function argument                                            Parameter or option
 Class                                                        Command group
 Return value annotation                                      Command settings

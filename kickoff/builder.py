@@ -1,13 +1,13 @@
 import click
 import inspect
-from functools import wraps
+from functools import wraps, partial
 import click_repl
 from click_didyoumean import DYMGroup
 from prompt_toolkit.styles import Style
 from .logger import log
 from .exceptions import user_exception_guard
 from .helpers import doc_to_short_help
-from . inspectutils import get_all_defaults, unwrap
+from . inspectutils import get_all_defaults, unwrap, extract_func, isclassmethod
 from . import cmdpath
 
 
@@ -144,9 +144,9 @@ class CmdGroupsManager:
             return new_group
 
 
-    def _wrap_command(self, cmd, arg_spec):
+    def _wrap_command(self, cmd, arg_spec_args, arg_spec_varargs, func):
 
-        @wraps(cmd)
+        @wraps(func)
         def command_wrapper(*args, **kwargs):
 
             # we assume that click allways passes all the parameters and options in kwargs
@@ -154,8 +154,8 @@ class CmdGroupsManager:
             kwargs_ = kwargs.copy()
 
             # put args and varargs in a row
-            varargs = kwargs_.pop(arg_spec.varargs, () )
-            plain_args = tuple(kwargs_.pop(arg_name) for arg_name in arg_spec.args)
+            varargs = kwargs_.pop(arg_spec_varargs, () )
+            plain_args = tuple(kwargs_.pop(arg_name) for arg_name in arg_spec_args)
             args_ = (*plain_args, *varargs)
 
             # execute command with error handling
@@ -165,16 +165,25 @@ class CmdGroupsManager:
         return command_wrapper
 
 
-    def add_command(self, path, func):
+    def add_command(self, path, func_info):
+        obj, cls = func_info
+        func = extract_func(obj)
         log.debug(f"Registering function {func.__qualname__!r} as {path!r} command")
 
+        if isclassmethod(obj):
+            func_partial = partial(func, cls)
+        else:
+            func_partial = func
+
         arg_spec = inspect.getfullargspec(unwrap(func))
+        arg_spec_args = arg_spec.args[int(isclassmethod(obj)):]
+
         all_defaults = get_all_defaults(arg_spec)
 
         short_help = doc_to_short_help(getattr(func, '__doc__', None))
         cmd_opts = dict(short_help=short_help)
         cmd_opts.update(arg_spec.annotations.get('return', {}))
-        command_wrapper = self._wrap_command(func, arg_spec)
+        command_wrapper = self._wrap_command(func_partial, arg_spec_args, arg_spec.varargs, func)
         cmd = click.command(**cmd_opts)(command_wrapper)
 
         def update_settings(settings, annotations):
@@ -184,7 +193,7 @@ class CmdGroupsManager:
                 log.warning(f'Annotation of dict type expected, got {type(annotations).__name__} instead, annotation will be ignored')
 
         # adding arguments
-        for arg in arg_spec.args:
+        for arg in arg_spec_args:
             required = arg not in all_defaults
             default = all_defaults.get(arg)
             log.debug(f'Arg: path={arg!r}, required={required}, default={default!r}')
