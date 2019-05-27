@@ -1,13 +1,16 @@
 import click
 import inspect
-from functools import wraps, partial
 import click_repl
+from functools import wraps, partial
+from pathlib import Path
 from click_didyoumean import DYMGroup
 from prompt_toolkit.styles import Style
+from prompt_toolkit.history import FileHistory
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from .logger import log
 from .exceptions import user_exception_guard
 from .helpers import doc_to_short_help
-from . inspectutils import get_all_defaults, unwrap, extract_func, isclassmethod
+from .inspectutils import get_all_defaults, unwrap, extract_func, isclassmethod
 from . import cmdpath
 
 
@@ -48,12 +51,22 @@ class CmdGroupsManager:
                 return
 
             prompt_kwargs = {'completer': KickoffCompleter(ctx.command, compl_blacklist),
-                              # simple text can be provided here if colors are not desired
-                              'message': [('class:appname', self._prog_name),
-                                          ('class:suffix',  ' > ')],
-                              'style': Style.from_dict({'appname': 'ansicyan bold',
-                                                        'suffix':  'ansigray'}),
+                             # simple text can be provided here if colors are not desired
+                             'message': [('class:appname', self._prog_name),
+                                         ('class:suffix',  ' > ')],
+                             'style': Style.from_dict({'appname': 'ansicyan bold',
+                                                       'suffix':  'ansigray'}),
+                             'enable_system_prompt': True,
+                             'enable_open_in_editor': True, # CTRL+X CTRL+E
+                             'complete_while_typing': True,
+                             'auto_suggest': AutoSuggestFromHistory(),
+
+                             # this works by default, if enabled explicitely complete_while_typing becomes disabled
+                             #'enable_history_search': True, # CTRL+R
                             }
+
+            if self._config.enable_history:
+                prompt_kwargs['history'] = FileHistory(Path('~').expanduser() / f'.{self._prog_name}_history'),
 
             click_repl.repl(ctx,
                             prompt_kwargs=prompt_kwargs,

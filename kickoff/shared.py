@@ -31,4 +31,5 @@ config = box.Box(accept_imported=False,
                  enable_repl=True,
                  enable_gui=True,
                  enable_didyoumean=True,
+                 enable_history=True,
                  )
