@@ -140,7 +140,8 @@ class CmdGroupsManager:
         def target(): pass
         target.__doc__ = doc
         short_help = doc_to_short_help(doc)
-        return click.group(cls=self._get_group_class(), name=name, short_help=short_help)(target)
+        name_fixed = name.replace('_', '-')
+        return click.group(cls=self._get_group_class(), name=name_fixed, short_help=short_help)(target)
 
 
     def _obtain_group(self, path):
