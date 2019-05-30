@@ -28,7 +28,7 @@ Option                  Default Value                              Description
 ``enable_repl``         ``True``                                   Makes ``--repl`` option available in top level CLI of your application.
 ``enable_gui``          ``True``                                   Makes ``--gui`` option available in top level CLI of your application (if only required dependencies are installed).
 ``enable_didyoumean``   ``True``                                   Provides the user with suggestions about misspelled commands.
-``enable_history``      ``True``                                   Preserve history in REPL. History is stored in ``~/.{prog_name}.history`` file.
+``enable_history``      ``True``                                   Preserve history in REPL. History is stored in ``~/.{prog_name}_history`` file.
 ``command_wrapper``     ``kickoff.default_command_wrapper``        Function that wraps each of your commands.
 ``error_handler``       ``None``                                   Custom exception handler function.
 ======================= ========================================== ==============================================================================================================================================================

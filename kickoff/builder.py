@@ -66,7 +66,7 @@ class CmdGroupsManager:
                             }
 
             if self._config.enable_history:
-                prompt_kwargs['history'] = FileHistory(Path('~').expanduser() / f'.{self._prog_name}.history')
+                prompt_kwargs['history'] = FileHistory(Path('~').expanduser() / f'.{self._prog_name}_history')
 
             click_repl.repl(ctx,
                             prompt_kwargs=prompt_kwargs,
