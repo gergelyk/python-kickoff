@@ -140,7 +140,7 @@ class CmdGroupsManager:
         def target(): pass
         target.__doc__ = doc
         short_help = doc_to_short_help(doc)
-        name_fixed = name.replace('_', '-')
+        name_fixed = name.replace('_', '-').rstrip('-')
         return click.group(cls=self._get_group_class(), name=name_fixed, short_help=short_help)(target)
 
 
@@ -198,7 +198,8 @@ class CmdGroupsManager:
         cmd_opts = dict(short_help=short_help)
         cmd_opts.update(arg_spec.annotations.get('return', {}))
         command_wrapper = self._wrap_command(func_partial, arg_spec_args, arg_spec.varargs, func)
-        cmd = click.command(**cmd_opts)(command_wrapper)
+        name = func.__name__.replace('_', '-').rstrip('-')
+        cmd = click.command(name, **cmd_opts)(command_wrapper)
 
         def update_settings(settings, annotations):
             if isinstance(annotations, dict):
