@@ -194,11 +194,14 @@ class CmdGroupsManager:
 
         all_defaults = get_all_defaults(arg_spec)
 
+        def demangle(name):
+            return name.replace('_', '-').rstrip('-')
+        
         short_help = doc_to_short_help(getattr(func, '__doc__', None))
         cmd_opts = dict(short_help=short_help)
         cmd_opts.update(arg_spec.annotations.get('return', {}))
         command_wrapper = self._wrap_command(func_partial, arg_spec_args, arg_spec.varargs, func)
-        name = func.__name__.replace('_', '-').rstrip('-')
+        name = demangle(func.__name__)
         cmd = click.command(name, **cmd_opts)(command_wrapper)
 
         def update_settings(settings, annotations):
@@ -233,7 +236,7 @@ class CmdGroupsManager:
                 assert len(alias) == 2, "alias should consist of one character preceded by '-'"
             aliases = filter(None, (alias,) )
             update_settings(settings, ann)
-            cmd = click.option(f'--{opt}', *aliases, **settings)(cmd)
+            cmd = click.option(f'--{demangle(opt)}', *aliases, **settings)(cmd)
 
         # adding variadic arguments
         if arg_spec.varargs:
