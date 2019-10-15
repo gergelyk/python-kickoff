@@ -6,13 +6,13 @@ from .helpers import load_customize_file, parse_args
 from .exceptions import global_exception_guard
 from .logger import log
 
-def main():
+def main(argv):
     """An entry point of `kickoff` command"""
 
     with global_exception_guard():
         load_customize_file()
 
-        resource_path, resource_name, app_args = parse_args(sys.argv)
+        resource_path, resource_name, app_args = parse_args(argv)
         loader = Loader(resource_path, resource_name)
         config, commands, galaxy, app_name, app_doc = loader.get_resources()
         groups_mgr = CmdGroupsManager(galaxy, config, app_doc, app_name)
@@ -24,4 +24,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
