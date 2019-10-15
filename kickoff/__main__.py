@@ -6,7 +6,7 @@ from .helpers import load_customize_file, parse_args
 from .exceptions import global_exception_guard
 from .logger import log
 
-def main(argv):
+def main(argv=sys.argv):
     """An entry point of `kickoff` command"""
 
     with global_exception_guard():
@@ -24,4 +24,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
