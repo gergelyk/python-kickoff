@@ -64,14 +64,13 @@ Releasing
     git tag 1.2.3
 
     # upload code
+    git push
     git push --tags
     python3 setup.py build sdist
     twine upload dist/kickoff-1.2.3.tar.gz
 
     # upload documentation
-    nothing to be done, it is automatically triggered by github
-
-
+    log into readthedocs.io and trigger a Build
 
 
 
