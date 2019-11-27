@@ -109,4 +109,5 @@ Examples
 
 - `ex07_error_handling <https://github.com/gergelyk/python-kickoff/blob/master/examples/ex07_error_handling/demo.py>`_ How not to frighten your users with a traceback each time when something goes wrong.
 
+- `ex08_freezing_environment <https://github.com/gergelyk/python-kickoff/blob/master/examples/ex08_freezing_environment>`_ How to call ``kickoff`` from a script. Alternative Ways of calling ``kickoff``-based application.
 
