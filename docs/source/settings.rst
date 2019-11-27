@@ -20,11 +20,12 @@ Option                  Default Value                              Description
 ======================= ========================================== ==============================================================================================================================================================
 ``accept_imported``     ``False``                                  Inspect entire content of given module, not only functions and classes defined locally.
 ``scan_recursively``    ``True``                                   Inspect classes (allows for creating command groups).
-``result_file``         ``sys.stderr``                             Where to print stringified values returned by the commands. Use ``/dev/null`` if you want to suppress them.
 ``black_list``          ``[]``                                     Functions and classes to be explicitely skipped in the inspection process.
 ``prog_name``           ``None``                                   Name of the application to be used in context help.
-``version_option``      ``None``                                   Dictionary to be unpacked to the arguments of `click.version_option <https://click.palletsprojects.com/en/7.x/api/#click.version_option>`__ function.
+``prompt_caption``      ``None``                                   Text to be displayed at the beginngin of the prompt.
+``prompt_suffix``       ``> ``                                     Text to be displayed at the end of the prompt.
 ``help_option_names``   ``None``                                   Dictionary to be unpacked to the arguments of `click.help_option <https://click.palletsprojects.com/en/7.x/api/#click.help_option>`__.
+``version_option``      ``None``                                   Dictionary to be unpacked to the arguments of `click.version_option <https://click.palletsprojects.com/en/7.x/api/#click.version_option>`__ function.
 ``enable_repl``         ``True``                                   Makes ``--repl`` option available in top level CLI of your application.
 ``enable_gui``          ``True``                                   Makes ``--gui`` option available in top level CLI of your application (if only required dependencies are installed).
 ``enable_didyoumean``   ``True``                                   Provides the user with suggestions about misspelled commands.

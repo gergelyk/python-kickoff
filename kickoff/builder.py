@@ -34,6 +34,8 @@ class CmdGroupsManager:
         self._galaxy = galaxy
         self._config = config
         self._prog_name = self._config.prog_name or app_name
+        self._prompt_caption =  self._config.prompt_caption or self._prog_name
+        self._prompt_suffix = self._config.prompt_suffix
         top_group = self._create_top_group(app_doc)
         self._groups = {cmdpath.root: top_group}
 
@@ -54,8 +56,8 @@ class CmdGroupsManager:
 
             prompt_kwargs = {'completer': KickoffCompleter(ctx.command, compl_blacklist),
                              # simple text can be provided here if colors are not desired
-                             'message': [('class:appname', self._prog_name),
-                                         ('class:suffix',  '> ')],
+                             'message': [('class:appname', self._prompt_caption),
+                                         ('class:suffix',  self._prompt_suffix)],
                              'style': Style.from_dict({'appname': 'ansicyan bold',
                                                        'suffix':  'ansigray'}),
                              'enable_system_prompt': True,

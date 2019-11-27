@@ -10,6 +10,7 @@ def hello(name="World") -> dict(short_help="say hello"):
 if __name__ == "__kickoff__":
     import kickoff
     kickoff.config.prog_name = "demo"
+    kickoff.config.prompt_suffix = ">> "
     kickoff.config.version_option = dict(version='1.2.3')
     kickoff.config.help_option_names = ['-h', '--help']
 
