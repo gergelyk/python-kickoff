@@ -55,7 +55,7 @@ class CmdGroupsManager:
             prompt_kwargs = {'completer': KickoffCompleter(ctx.command, compl_blacklist),
                              # simple text can be provided here if colors are not desired
                              'message': [('class:appname', self._prog_name),
-                                         ('class:suffix',  ' > ')],
+                                         ('class:suffix',  '> ')],
                              'style': Style.from_dict({'appname': 'ansicyan bold',
                                                        'suffix':  'ansigray'}),
                              'enable_system_prompt': True,
