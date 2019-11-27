@@ -111,3 +111,5 @@ Examples
 
 - `ex08_freezing_environment <https://github.com/gergelyk/python-kickoff/blob/master/examples/ex08_freezing_environment>`_ How to call ``kickoff`` from a script. Alternative Ways of calling ``kickoff``-based application.
 
+- `ex09_advanced_types <https://github.com/gergelyk/python-kickoff/blob/master/examples/ex09_advanced_types>`_ Using `IntEnum` and integers in hexadecimal notation.
+

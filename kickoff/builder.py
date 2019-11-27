@@ -214,7 +214,7 @@ class CmdGroupsManager:
 
         def upgrade_types(default, settings):
             type_ = settings.get('type', type(default))
-            if issubclass(type_, IntEnum):
+            if isinstance(type_, type) and issubclass(type_, IntEnum):
                 settings['type'] = IntEnumParamType(type_)
 
         # adding arguments
