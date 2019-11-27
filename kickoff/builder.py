@@ -1,6 +1,7 @@
 import click
 import inspect
 import click_repl
+from enum import IntEnum
 from functools import wraps, partial
 from pathlib import Path
 from click_didyoumean import DYMGroup
@@ -11,6 +12,7 @@ from .logger import log
 from .exceptions import user_exception_guard
 from .helpers import doc_to_short_help
 from .inspectutils import get_all_defaults, unwrap, extract_func, isclassmethod
+from .types import IntEnumParamType
 from . import cmdpath
 
 
@@ -196,7 +198,7 @@ class CmdGroupsManager:
 
         def demangle(name):
             return name.replace('_', '-').rstrip('-')
-        
+
         short_help = doc_to_short_help(getattr(func, '__doc__', None))
         cmd_opts = dict(short_help=short_help)
         cmd_opts.update(arg_spec.annotations.get('return', {}))
@@ -210,6 +212,11 @@ class CmdGroupsManager:
             else:
                 log.warning(f'Annotation of dict type expected, got {type(annotations).__name__} instead, annotation will be ignored')
 
+        def upgrade_types(default, settings):
+            type_ = settings.get('type', type(default))
+            if issubclass(type_, IntEnum):
+                settings['type'] = IntEnumParamType(type_)
+
         # adding arguments
         for arg in arg_spec_args:
             required = arg not in all_defaults
@@ -218,6 +225,7 @@ class CmdGroupsManager:
             settings = dict(required=required, default=default)
             ann = arg_spec.annotations.get(arg, {})
             update_settings(settings, ann)
+            upgrade_types(default, settings)
             cmd = click.argument(arg, **settings)(cmd)
 
         # adding options
@@ -236,6 +244,7 @@ class CmdGroupsManager:
                 assert len(alias) == 2, "alias should consist of one character preceded by '-'"
             aliases = filter(None, (alias,) )
             update_settings(settings, ann)
+            upgrade_types(default, settings)
             cmd = click.option(f'--{demangle(opt)}', *aliases, **settings)(cmd)
 
         # adding variadic arguments
