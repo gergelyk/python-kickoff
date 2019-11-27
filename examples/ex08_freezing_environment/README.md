@@ -1,8 +1,10 @@
 1. Prepare environment
 
     ```sh
-    ./setup.sh
+    python3 -m venv --clear venv
     source venv/bin/activate
+    pip install -r requirements.txt
+    pip install --no-deps -e .
     ```
 
     Now your application can be called...
@@ -18,7 +20,7 @@
     kickoff demo/__init__.py hello
     ```
 
-    but also...
+    and also...
 
     ```sh
     # as a local module
@@ -37,7 +39,7 @@
 2. Freeze (compile) with *pyinstaller*
 
     ```sh
-    make
+    pyinstaller demo/__main__.py --hidden-import demo -F -n demo
     ```
 
     Now your application can be also called as an executable:
