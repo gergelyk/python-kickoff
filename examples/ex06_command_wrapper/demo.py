@@ -15,5 +15,3 @@ if __name__ == "__kickoff__":
     import kickoff
     kickoff.config.command_wrapper = _verbose_command_wrapper
 
-
-

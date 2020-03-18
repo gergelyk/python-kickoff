@@ -1,3 +1,4 @@
+#!/usr/bin/env kickoff
 from kickoff.types import HEXDEC
 from enum import IntEnum
 

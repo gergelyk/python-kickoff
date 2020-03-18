@@ -5,7 +5,7 @@ import time
 def sleep(t: dict(type=int)):
     time.sleep(t)
 
-class say:
+class Say:
     from say import hi, bye
 
 class calc:
@@ -14,5 +14,6 @@ class calc:
 if __name__ == "__kickoff__":
     import kickoff
     kickoff.config.accept_imported = True
+    kickoff.config.blacklist = [sleep]
 
 
