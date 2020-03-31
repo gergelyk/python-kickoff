@@ -4,12 +4,12 @@ from pathlib import Path
 this_dir_path = Path(__file__).parent
 readme_path = this_dir_path / 'README.rst'
 
-with open(readme_path) as fh:
+with open(str(readme_path)) as fh:
     long_description = fh.read()
 
 setup(
     name = 'kickoff',
-    version = '0.5.10',
+    version = '0.5.11',
     description = 'Turns your Python script or module into an application with decent CLI.',
     author = 'Grzegorz Krason',
     author_email = 'grzegorz.krason@gmail.com',
