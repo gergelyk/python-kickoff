@@ -12,7 +12,7 @@ better-exceptions==0.2.2
     # via -r requirements-dev.in
 bleach==3.1.4
     # via readme-renderer
-certifi==2022.12.7
+certifi==2023.7.22
     # via requests
 chardet==3.0.4
     # via requests
