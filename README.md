@@ -1,4 +1,7 @@
 # kickoff
+![PyPI - Version](https://img.shields.io/pypi/v/kickoff)
+![PyPI - License](https://img.shields.io/pypi/l/kickoff)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/kickoff)
 
 Turns your Python script or module into an application with decent user interface.
 
