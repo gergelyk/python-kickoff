@@ -81,3 +81,7 @@ twine upload dist/kickoff-1.2.3.tar.gz
 # upload documentation
 log into readthedocs.io and trigger a Build
 ```
+
+## Similar Projects
+
+- https://typer.tiangolo.com/
